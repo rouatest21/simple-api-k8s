@@ -38,3 +38,9 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s-manifests/
+
+      - name: Deploy Monitoring (Prometheus & Grafana)
+        run: |
+          kubectl apply -f k8s-manifests/monitoring/namespace.yaml
+          kubectl apply -f k8s-manifests/monitoring/prometheus/
+          kubectl apply -f k8s-manifests/monitoring/grafana/

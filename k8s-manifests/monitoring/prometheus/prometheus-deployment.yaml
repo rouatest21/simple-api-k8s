@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+      - name: prometheus
+        image: prom/prometheus:latest
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/prometheus/           # chemin attendu par Prometheus pour sa config
+          readOnly: true
+      volumes:
+      - name: config-volume
+        configMap:
+          name: prometheus-config                # nom exact du ConfigMap
+          items:
+          - key: prometheus.yml                   # clé dans le ConfigMap
+            path: prometheus.yml                  # fichier monté dans le container
